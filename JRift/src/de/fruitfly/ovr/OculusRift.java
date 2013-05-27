@@ -7,6 +7,8 @@ public class OculusRift implements IOculusRift {
 	
 	private HMDInfo hmdInfo = new HMDInfo();
 	
+	private SensorInfo sensorInfo = new SensorInfo();
+	
 	public OculusRift() {
 		
 	}
@@ -36,6 +38,7 @@ public class OculusRift implements IOculusRift {
 	
 	public void poll() {
 		pollSubsystem();
+		this.sensorInfo = new SensorInfo(this._getYaw(), this._getPitch(), this._getRoll());
 	}
 	
 	public HMDInfo getHMDInfo() {
@@ -43,7 +46,7 @@ public class OculusRift implements IOculusRift {
 	}
 	
 	public SensorInfo getSensorInfo() {
-		return null;
+		return this.sensorInfo;
 	}
 	
 	public float getYaw() {
@@ -92,12 +95,14 @@ public class OculusRift implements IOculusRift {
 		or.init();
 		
 		HMDInfo hmdInfo = or.getHMDInfo();
+		SensorInfo sensorInfo = null;
 		System.out.println(hmdInfo);
 		
 		while (or.isInitialized()) {
 			or.poll();
 			
-			System.out.println("Yaw: " + or.getYaw() + " Pitch: " + or.getPitch() + " Roll: " + or.getRoll());
+			sensorInfo = new SensorInfo(or.getYaw(), or.getPitch(), or.getRoll());
+			System.out.println(sensorInfo);
 			
 			try {
 				Thread.sleep(100);
